@@ -308,6 +308,21 @@ public class PrepareReleaseMojo
     private boolean pinExternals;
 
     /**
+     * Specifies the line separator to format pom.xml. The default value is system. The following properties are
+     * available:
+     * <ul>
+     * <li><code>system</code> - Use the system line separator.</li>
+     * <li><code>lf</code> - Use \n as line separator.</li>
+     * <li><code>cr</code> - Use \r as line separator.</li>
+     * <li><code>crlf</code> - Use \r\n as line separator.</li>
+     * </ul>
+     *
+     * @since 3.0.0
+     */
+    @Parameter( defaultValue = "system", property = "lineSeparator" )
+    private String lineSeparator;
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -353,6 +368,7 @@ public class PrepareReleaseMojo
         config.setScmReleaseCommitComment( scmReleaseCommitComment );
         config.setAutoResolveSnapshots( autoResolveSnapshots );
         config.setPinExternals( pinExternals );
+        config.setLineSeparator( resolveLineSeparator() );
 
         if ( checkModificationExcludeList != null )
         {
@@ -384,6 +400,27 @@ public class PrepareReleaseMojo
         catch ( ReleaseFailureException e )
         {
             throw new MojoFailureException( e.getMessage(), e );
+        }
+    }
+
+    private String resolveLineSeparator()
+    {
+        if ( lineSeparator  == null )
+        {
+            return System.getProperty( "line.separator" );
+        }
+
+        switch ( lineSeparator )
+        {
+            case "lf":
+                return "\n";
+            case "cr":
+                return "\r";
+            case "crlf":
+                return "\r\n";
+            default:
+                throw new IllegalArgumentException( String.format( "Unknown property lineSeparator: '%s'. Use one of" +
+                        " the following: 'system', 'lf', 'cr', 'crlf'.", lineSeparator ) );
         }
     }
 
