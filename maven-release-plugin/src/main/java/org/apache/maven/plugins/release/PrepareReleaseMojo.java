@@ -417,7 +417,9 @@ public class PrepareReleaseMojo
             case "cr":
                 return "\r";
             case "crlf":
-                return "\r\n";
+                return "\r\n"; 
+            case "system":
+                return System.getProperty( "line.separator" );
             default:
                 throw new IllegalArgumentException( String.format( "Unknown property lineSeparator: '%s'. Use one of" +
                         " the following: 'system', 'lf', 'cr', 'crlf'.", lineSeparator ) );
