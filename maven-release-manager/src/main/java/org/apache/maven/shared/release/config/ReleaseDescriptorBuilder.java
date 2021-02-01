@@ -458,7 +458,7 @@ public class ReleaseDescriptorBuilder
         return this;
     }
 
-    BuilderReleaseDescriptor build()
+    public BuilderReleaseDescriptor build()
     {
         return releaseDescriptor;
     }
